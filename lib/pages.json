@@ -1,0 +1,24 @@
+{
+    "pages": [
+        {
+            "href": "/",
+            "label": "Home"
+        },
+        {
+            "href": "/pages/pokedex",
+            "label": "Pokedex"
+        },
+        {
+            "href": "/pages/types",
+            "label": "Types"
+        },
+        {
+            "href": "/pages/favorites",
+            "label": "Favorites"
+        },
+        {
+            "href": "/pages/search",
+            "label": "Search"
+        }
+    ]
+}

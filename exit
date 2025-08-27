@@ -1,0 +1,21 @@
+[33mcommit 822383cd5d938dfc0cd53e97b856e83e2b47bfe3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: VladZGarcia <113976475+VladZGarcia@users.noreply.github.com>
+Date:   Tue Aug 26 11:18:36 2025 +0200
+
+    Add dynamic color to Pokémon card UI
+    
+    Introduces a 'color' prop to the PokemonCard component, allowing the card's border and background to reflect the Pokémon's color fetched from the species endpoint. Updates fetchRandomPokemon to include color data, adjusts UI styles for better color integration, and adds a fallback for missing artwork images.
+
+[33mcommit aa55c66add2c0fea09ae0cd2cfe3417cd8840c65[m
+Author: VladZGarcia <113976475+VladZGarcia@users.noreply.github.com>
+Date:   Mon Aug 25 21:15:09 2025 +0200
+
+    Add random Pokémon card feature
+    
+    Introduces a PokemonCard component and supporting data fetching logic to display a random Pokémon with stats and artwork. Updates the home page to show a card for a random Pokémon and allows users to fetch a new one. Adds necessary interfaces and configures Next.js to allow images from raw.githubusercontent.com.
+
+[33mcommit a594eada4cbc80565f2e8d6e7ad16a7f61e5ea48[m
+Author: VladZGarcia <113976475+VladZGarcia@users.noreply.github.com>
+Date:   Mon Aug 25 09:44:00 2025 +0200
+
+    Initial project poilerplate
