@@ -4,10 +4,12 @@ import { fetchPokemons } from "@/lib/data/pokemons";
 import { Pokemon } from "@/lib/interfaces";
 import { useState, useEffect, useRef } from "react";
 
-const nrOfPokemonsToFetch = 20;
+const nrOfPokemonsToFetch = 30;
+const offsetStart = 0;
+const maxOffset = 1020;
 
 export function PokedexList() {
-  const [offset, setOffset] = useState(0);
+  const [offset, setOffset] = useState(offsetStart);
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -17,7 +19,7 @@ export function PokedexList() {
     // Fetch initial batch
     const loadInitial = async () => {
       setLoading(true);
-      const initialPokemons = await fetchPokemons(0, nrOfPokemonsToFetch);
+      const initialPokemons = await fetchPokemons(offsetStart, nrOfPokemonsToFetch);
       setPokemons(initialPokemons);
       setLoading(false);
       setOffset(nrOfPokemonsToFetch);
@@ -34,7 +36,7 @@ export function PokedexList() {
       setPokemons((prev) => [...prev, ...newPokemons]);
       setLoading(false);
       setOffset((prev) => prev + nrOfPokemonsToFetch);
-      if (newPokemons.length < nrOfPokemonsToFetch) setHasMore(false);
+      if (newPokemons.length < nrOfPokemonsToFetch || offset + nrOfPokemonsToFetch >= maxOffset) setHasMore(false);
     };
 
     let observer: IntersectionObserver;
@@ -45,21 +47,23 @@ export function PokedexList() {
             loadMore();
           }
         },
-        { threshold: 1 }
+          {
+              threshold: 0, 
+            rootMargin: '500px',
+        }
       );
       observer.observe(loaderRef.current);
     }
     return () => {
       if (observer && loaderRef.current) observer.unobserve(loaderRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offset, hasMore, loading]);
 
   return (
     <>
       <ul className="grid gap-x-6 gap-y-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {pokemons.map((pokemon, index) => (
-          <li key={pokemon.id}>
+          <li key={pokemon.id + index}>
             <PokemonCard pokemon={pokemon} color={pokemon.color} />
           </li>
         ))}
