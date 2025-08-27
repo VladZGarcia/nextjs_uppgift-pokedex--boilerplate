@@ -36,4 +36,5 @@ export interface Pokemon {
   name: string;
   types: PokemonType[];
   stats: PokemonStat[];
+  color?: string;
 }
