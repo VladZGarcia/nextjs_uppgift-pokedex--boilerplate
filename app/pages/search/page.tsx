@@ -1,3 +1,5 @@
+import MainWrapper from "@/app/components/main-wrapper";
+import SearchBar from "@/app/components/searchBar";
 import { Pokemon } from "@/lib/interfaces";
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ query?: string }> }) {
@@ -6,9 +8,12 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     let searchResults: Pokemon[] = [];
 
   return (
-    <div>
-      <h1>Search Results for: {query}</h1>
-      {/* Render search results here */}
-    </div>
+    <MainWrapper title={`Search: ${query}`}>
+      <div className="flex flex-col items-center p-10 rounded-md shadow-md">
+        <SearchBar />
+        <h1>Search Results for: {query}</h1>
+        {/* Render search results here */}
+      </div>
+    </MainWrapper>
   );
 }

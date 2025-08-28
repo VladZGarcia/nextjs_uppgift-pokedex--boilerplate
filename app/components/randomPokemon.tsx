@@ -4,14 +4,15 @@ import { fetchRandomPokemon } from "@/lib/data/pokemons";
 import Image from "next/image";
 import PokemonCard from "./pokemonCard";
 
+
 export default function RandomPokemon() {
   const [pokemon, setPokemon] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
+
   const getRandomPokemon = async () => {
     setLoading(true);
     const randomPokemon = await fetchRandomPokemon();
-    console.log("Fetched random Pokémon:", randomPokemon.color);
     setPokemon(randomPokemon);
     setLoading(false);
   };

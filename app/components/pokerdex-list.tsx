@@ -61,7 +61,7 @@ export function PokedexList() {
 
   return (
     <>
-      <ul className="grid gap-x-6 gap-y-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <ul className="grid gap-x-6 gap-y-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
         {pokemons.map((pokemon, index) => (
           <li key={pokemon.id + index}>
             <PokemonCard pokemon={pokemon} color={pokemon.color} />
