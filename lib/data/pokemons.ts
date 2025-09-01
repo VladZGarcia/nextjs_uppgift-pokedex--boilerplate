@@ -1,14 +1,14 @@
 import { Pokemon, PokemonListItem } from '../interfaces';
 import { createNonRepeatingRandomizer } from '../utils/utils';
 
-export async function fetchPokemonData(offset: number, limit: number): Promise<PokemonListItem[]> {
+export async function fetchPokemonListItem(offset: number, limit: number): Promise<PokemonListItem[]> {
   const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`);
   const data = await response.json();
   return data.results as PokemonListItem[];
 }
 
 export async function fetchPokemons(offset: number, limit: number): Promise<Pokemon[]> {
-  const pokemonData = await fetchPokemonData(offset, limit);
+  const pokemonData = await fetchPokemonListItem(offset, limit);
   const pokemonDetails = await Promise.all(
     pokemonData.map(async (pokemon) => {
       const details : Pokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon.name}`).then(res => res.json());
@@ -19,10 +19,19 @@ export async function fetchPokemons(offset: number, limit: number): Promise<Poke
   return pokemonDetails as Pokemon[];
 }
 
+export async function fetchPokemonByName(name: string): Promise<Pokemon | null> {
+  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+  if (!response.ok) {
+    return null;
+  }
+  const data = await response.json();
+  return data as Pokemon;
+}
+
 export async function fetchRandomPokemon(): Promise<Pokemon & { color: string }> {
   const offsetStart = 0;
   const limit = 1020; // Total number of legit Pokémon in the API
-  const pokemonData = await fetchPokemonData(offsetStart, limit); // Fetch all Pokémon
+  const pokemonData = await fetchPokemonListItem(offsetStart, limit); // Fetch all Pokémon
 
   // Select a random Pokémon without repetition
   const randomizer = createNonRepeatingRandomizer(pokemonData);

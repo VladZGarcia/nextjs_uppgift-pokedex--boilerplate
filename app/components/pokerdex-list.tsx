@@ -3,6 +3,7 @@ import PokemonCard from "@/app/components/pokemonCard";
 import { fetchPokemons } from "@/lib/data/pokemons";
 import { Pokemon } from "@/lib/interfaces";
 import { useState, useEffect, useRef } from "react";
+import { LoadingScreen } from "./loadingScreen";
 
 const nrOfPokemonsToFetch = 30;
 const offsetStart = 0;
@@ -19,6 +20,7 @@ export function PokedexList() {
     // Fetch initial batch
     const loadInitial = async () => {
       setLoading(true);
+      await new Promise(resolve => setTimeout(resolve, 2000));
       const initialPokemons = await fetchPokemons(offsetStart, nrOfPokemonsToFetch);
       setPokemons(initialPokemons);
       setLoading(false);
@@ -70,7 +72,7 @@ export function PokedexList() {
       </ul>
       {hasMore && (
         <div ref={loaderRef} className="w-full flex justify-center py-8">
-          {loading ? "Loading..." : ""}
+          {loading ? <LoadingScreen/> : ""}
         </div>
       )}
     </>

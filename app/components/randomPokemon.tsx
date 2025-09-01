@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { fetchRandomPokemon } from "@/lib/data/pokemons";
 import Image from "next/image";
 import PokemonCard from "./pokemonCard";
+import { LoadingScreen } from "./loadingScreen";
 
 
 export default function RandomPokemon() {
@@ -34,7 +35,7 @@ export default function RandomPokemon() {
           />
           {loading ? "Loading..." : "Random Pokémon"}
         </button>
-        {pokemon && <PokemonCard pokemon={pokemon} color={pokemon.color} />}
+        {loading ? <LoadingScreen /> : (pokemon && <PokemonCard pokemon={pokemon} color={pokemon.color} />)}
       </section>
     </main>
   );
