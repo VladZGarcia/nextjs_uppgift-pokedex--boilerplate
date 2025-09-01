@@ -1,10 +1,12 @@
 "use client";
 
 import { fetchPokemonByName, fetchPokemonListItem } from "@/lib/data/pokemons";
+import { PokemonListItem } from "@/lib/interfaces";
+import { off } from "process";
 import { useState, useEffect } from "react";
 
 const offset = 0;
-const limit = 1020;
+const allPokemon = 1302;
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
@@ -13,15 +15,15 @@ export default function SearchBar() {
 
   useEffect(() => {
     async function loadData() {
-      const data = await fetchPokemonData();
-      setPokemonData(data);
+      const data = await fetchPokemonListItem(offset, allPokemon);
+      setPokemonListItems(data);
     }
     loadData();
   }, []);
 
   const filteredPokemons =
     query.length > 0
-      ? pokemonData.filter((pokemon) =>
+      ? pokemonListItems.filter((pokemon) =>
           pokemon.name.toLowerCase().startsWith(query.toLowerCase())
         )
       : [];
@@ -30,7 +32,7 @@ export default function SearchBar() {
     <div className="relative w-80 mx-auto">
       <input
         type="text"
-        className="w-full p-2 border rounded"
+        className="w-full p-2 border rounded bg-white shadow-black/20 shadow-md"
         placeholder="Search Pokémon..."
         value={query}
         onChange={(e) => {

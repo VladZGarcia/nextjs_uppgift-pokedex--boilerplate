@@ -21,6 +21,10 @@ export interface PokemonListItem {
 }
 
 export interface Pokemon {
+  species: {
+    name: string;
+    url: string;
+  }
   sprites: {
     front_default: string;
     back_default: string;
