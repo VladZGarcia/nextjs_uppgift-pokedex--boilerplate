@@ -4,6 +4,7 @@ import { fetchPokemons } from "@/lib/data/pokemons";
 import { Pokemon } from "@/lib/interfaces";
 import { useState, useEffect, useRef } from "react";
 import { LoadingScreen } from "./loadingScreen";
+import Link from "next/link";
 
 const nrOfPokemonsToFetch = 50;
 const offsetStart = 0;
@@ -27,7 +28,6 @@ export function PokedexList() {
       setPokemons(initialPokemons);
       setLoading(false);
       setOffset(offset + nrOfPokemonsToFetch);
-      console.log("Initial load complete. Next offset:", offset);
       if (initialPokemons.length < nrOfPokemonsToFetch) setHasMore(false);
     };
     loadInitial();
@@ -55,7 +55,7 @@ export function PokedexList() {
         },
           {
               threshold: 0, 
-            rootMargin: '300px',
+            rootMargin: '400px',
         }
       );
       observer.observe(loaderRef.current);
@@ -67,10 +67,10 @@ export function PokedexList() {
 
   return (
     <>
-      <ul className="grid gap-x-6 gap-y-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
+      <ul className="grid gap-x-6 gap-y-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 cursor-crosshair">
         {pokemons.map((pokemon) => (
           <li key={pokemon.id}>
-            <PokemonCard pokemon={pokemon} color={pokemon.color} />
+              <PokemonCard pokemon={pokemon} color={pokemon.color} />
           </li>
         ))}
       </ul>

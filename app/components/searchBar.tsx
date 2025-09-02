@@ -3,6 +3,7 @@
 import { fetchPokemonListItem, fetchPokemons } from "@/lib/data/pokemons";
 import { PokemonListItem } from "@/lib/interfaces";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useRef, useState, useEffect } from "react";
 
 export default function SearchBar() {
@@ -10,6 +11,7 @@ export default function SearchBar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [pokemonList, setPokemonList] = useState<PokemonListItem[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const router = useRouter();
   const offset = 0;
   const limit = 1302; // match pokemons.ts
   const ulRef = useRef<HTMLUListElement>(null);
@@ -64,6 +66,7 @@ export default function SearchBar() {
     } else if (e.key === "Enter" && highlightedIndex >= 0) {
       setQuery(filteredPokemons[highlightedIndex].name);
       setShowDropdown(false);
+      router.push(`/pages/search/${filteredPokemons[highlightedIndex].name}`);
       e.preventDefault();
     } else if (e.key === "Escape") {
       setQuery("");

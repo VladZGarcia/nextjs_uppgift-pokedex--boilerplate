@@ -9,25 +9,40 @@ export async function fetchPokemonListItem(offset: number, limit: number): Promi
 
 export async function fetchPokemons(offset: number, limit: number): Promise<Pokemon[]> {
   const pokemonData = await fetchPokemonListItem(offset, limit);
-  console.log("fetchPokemons Data: ", pokemonData);
   const pokemonDetails = await Promise.all(
     pokemonData.map(async (pokemon) => {
-      const details: Pokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon.name}`).then(res => res.json());
-      const species = await fetch(`${details.species.url}`).then(res => res.json());
-      if (!species.color) return { ...details, color: 'yellow' };
-      return { ...details, color: species.color?.name || 'yellow' };
+      const details = await fetchPokemonByName(pokemon.name);
+      if (!details) return null;
+      return details;
     })
   );
-  return pokemonDetails as Pokemon[];
+  // Filter out any nulls (in case fetchPokemonByName fails)
+  return pokemonDetails.filter(Boolean) as Pokemon[];
 }
 
 export async function fetchPokemonByName(name: string): Promise<Pokemon | null> {
-  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`).then(res => res.json());
+  const species = await fetch(`${response.species.url}`).then(res => res.json());
+  if (!species.color) return { ...response, color: 'yellow' };
+  return { ...response, color: species.color?.name || 'yellow' };
+}
+
+export async function fetchPokemonsByType(type: string): Promise<Pokemon[]> {
+  const response = await fetch(`https://pokeapi.co/api/v2/type/${type}`);
   if (!response.ok) {
-    return null;
+    return [];
   }
   const data = await response.json();
-  return data as Pokemon;
+  console.log("Pokemon of type", type, ":", data.pokemon.length);
+
+  const pokemonDetails = await Promise.all(
+    data.pokemon.map(async (p: { pokemon: { name: string } }) => {
+      const details = await fetchPokemonByName(p.pokemon.name);
+      return details;
+    })
+  );
+
+  return pokemonDetails.filter((p): p is Pokemon => p !== null);
 }
 
 export async function fetchRandomPokemon(): Promise<Pokemon & { color: string }> {
