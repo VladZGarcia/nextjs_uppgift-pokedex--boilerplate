@@ -2,6 +2,7 @@
 
 import { fetchPokemonListItem, fetchPokemons } from "@/lib/data/pokemons";
 import { PokemonListItem } from "@/lib/interfaces";
+import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
 
 export default function SearchBar() {
@@ -76,7 +77,7 @@ export default function SearchBar() {
     <div className="relative w-80 mx-auto">
       <input
         type="text"
-        className="w-full p-2 border rounded"
+        className="w-full p-2 border rounded bg-white"
         placeholder="Search Pokémon..."
         value={query}
         onChange={(e) => {
@@ -99,13 +100,14 @@ export default function SearchBar() {
                 idx === highlightedIndex
                   ? "bg-yellow-200"
                   : "hover:bg-yellow-100"
-              }`}
-              onMouseDown={() => {
-                setQuery(pokemon.name);
+                }`}>
+              <Link href={`/pages/search/${pokemon.name}`} key={pokemon.name}
+              onClick={() => {
                 setShowDropdown(false);
               }}
             >
-              {pokemon.name}
+                {pokemon.name}
+              </Link>
             </li>
           ))}
         </ul>

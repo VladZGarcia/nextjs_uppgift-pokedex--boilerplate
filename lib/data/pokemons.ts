@@ -4,7 +4,6 @@ import { createNonRepeatingRandomizer } from '../utils/utils';
 export async function fetchPokemonListItem(offset: number, limit: number): Promise<PokemonListItem[]> {
   const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`);
   const data = await response.json();
-  console.log("list next page: ", data.next);
   return data.results as PokemonListItem[];
 }
 
