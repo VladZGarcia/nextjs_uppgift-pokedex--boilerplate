@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import { fetchRandomPokemon } from "@/lib/data/pokemons";
 import Image from "next/image";
-import PokemonCard from "./pokemonCard";
-import { LoadingScreen } from "./loadingScreen";
+import PokemonCard from "./pokemon-card";
+import { LoadingScreen } from "./loading-screen";
 
 
 export default function RandomPokemon() {

@@ -1,6 +1,6 @@
 import Footer from "@/app/components/footer";
 import MainWrapper from "@/app/components/main-wrapper";
-import PokemonCard from "@/app/components/pokemonCard";
+import PokemonCard from "@/app/components/pokemon-card";
 import { fetchPokemonsByType } from "@/lib/data/pokemons";
 import { Pokemon } from "@/lib/interfaces";
 

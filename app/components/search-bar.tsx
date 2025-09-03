@@ -5,7 +5,7 @@ import { PokemonListItem } from "@/lib/interfaces";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState, useEffect, useMemo } from "react";
-import PokemonCard from "./pokemonCard";
+import PokemonCard from "./pokemon-card";
 
 interface SearchBarProps {
   onSearchPage?: boolean;
@@ -19,7 +19,7 @@ export default function SearchBar({ onSearchPage }: SearchBarProps) {
   const [filteredPokemonsDetails, setFilteredPokemonsDetails] = useState<any[]>([]);
   const router = useRouter();
   const offset = 0;
-  const limit = 1302; // match pokemons.ts
+  const limit = 1302; 
   const ulRef = useRef<HTMLUListElement>(null);
 
   // Load initial Pokemon list
@@ -153,13 +153,12 @@ export default function SearchBar({ onSearchPage }: SearchBarProps) {
         </ul>
         )}
       </div>
-      <div className="mx-auto">
+      <div className="mx-auto mt-8">
       {onSearchPage && filteredPokemonsDetails.length > 0 && (
-        <ul className="grid gap-x-6 gap-y-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 mt-10">
+        <ul className="grid gap-x-6 gap-y-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
           {filteredPokemonsDetails.map((pokemon) => (
             <li key={pokemon.name}>
                 <PokemonCard pokemon={pokemon} color={pokemon.color} />
-             
             </li>
           ))}
         </ul>

@@ -1,9 +1,9 @@
 "use client";
-import PokemonCard from "@/app/components/pokemonCard";
+import PokemonCard from "@/app/components/pokemon-card";
 import { fetchPokemons } from "@/lib/data/pokemons";
 import { Pokemon } from "@/lib/interfaces";
 import { useState, useEffect, useRef } from "react";
-import { LoadingScreen } from "./loadingScreen";
+import { LoadingScreen } from "./loading-screen";
 import Link from "next/link";
 
 const nrOfPokemonsToFetch = 50;

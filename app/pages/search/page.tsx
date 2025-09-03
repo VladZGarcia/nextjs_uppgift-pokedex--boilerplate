@@ -1,6 +1,6 @@
 import Footer from "@/app/components/footer";
 import MainWrapper from "@/app/components/main-wrapper";
-import SearchBar from "@/app/components/searchBar";
+import SearchBar from "@/app/components/search-bar";
 import { Pokemon } from "@/lib/interfaces";
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ query?: string }> }) {

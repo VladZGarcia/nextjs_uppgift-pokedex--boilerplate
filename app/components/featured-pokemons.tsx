@@ -2,8 +2,8 @@
 import { fetchRandomPokemonsList } from "@/lib/data/pokemons";
 import { Pokemon } from "@/lib/interfaces";
 import { useState } from "react";
-import PokemonCard from "./pokemonCard";
-import { LoadingScreen } from "./loadingScreen";
+import PokemonCard from "./pokemon-card";
+import { LoadingScreen } from "./loading-screen";
 
 const nrOfPokemonsToFetch = 4;
 

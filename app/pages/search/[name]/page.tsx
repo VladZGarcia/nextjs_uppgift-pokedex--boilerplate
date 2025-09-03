@@ -1,6 +1,6 @@
 import Footer from "@/app/components/footer";
 import MainWrapper from "@/app/components/main-wrapper";
-import PokemonCard from "@/app/components/pokemonCard";
+import PokemonCard from "@/app/components/pokemon-card";
 import { fetchPokemonByName } from "@/lib/data/pokemons";
 
 async function PokemonsByName({
@@ -12,7 +12,7 @@ async function PokemonsByName({
     // Fetch Pokémon data by name
     const pokemon = await fetchPokemonByName(name.name.toLowerCase());
     return (
-        <ul className="grid grid-cols-1 max-w-md mx-auto gap-4 mt-8">
+        <ul className="grid grid-cols-1 max-w-md mx-auto gap-4 mt-8 mb-10">
             <li key={pokemon?.name}>
                 {pokemon && <PokemonCard pokemon={pokemon} color={pokemon?.color} />}
             </li>

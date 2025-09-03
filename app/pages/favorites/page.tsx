@@ -1,6 +1,6 @@
-import FeaturedPokemons from "@/app/components/featuredPokemons";
+import FeaturedPokemons from "@/app/components/featured-pokemons";
 import Footer from "@/app/components/footer";
-import { LoadingScreen } from "@/app/components/loadingScreen";
+import { LoadingScreen } from "@/app/components/loading-screen";
 import MainWrapper from "@/app/components/main-wrapper";
 import { Suspense } from "react";
 

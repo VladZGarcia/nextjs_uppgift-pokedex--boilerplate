@@ -1,9 +1,9 @@
 import { Suspense } from "react";
-import FeaturedPokemons from "./components/featuredPokemons";
+import FeaturedPokemons from "./components/featured-pokemons";
 import Footer from "./components/footer";
-import RandomPokemon from "./components/randomPokemon";
-import SearchBar from "./components/searchBar";
-import { LoadingScreen } from "./components/loadingScreen";
+import RandomPokemon from "./components/random-pokemon";
+import SearchBar from "./components/search-bar";
+import { LoadingScreen } from "./components/loading-screen";
 
 export default function Home() {
 
