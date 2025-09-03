@@ -12,7 +12,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     <main className="flex flex-col mb-10">
       <MainWrapper title={query ? `Search result for: "${query}"` : "Search Pokemon"}>
       <div className="flex flex-col items-center p-10 rounded-md min-h-[700px]">
-        <SearchBar />
+        <SearchBar onSearchPage={true} />
         {/* Render search results here */}
       </div>
     </MainWrapper>

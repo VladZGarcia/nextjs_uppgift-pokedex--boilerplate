@@ -27,9 +27,9 @@ export default function FeaturedPokemons() {
     return (
         <div>
             {loading ? <LoadingScreen /> : (
-                <ul className="grid relative items-center gap-x-8 gap-y-3 grid-cols-1 sd:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 p-4">
+                <ul className="grid gap-x-8 gap-y-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 p-4 place-items-center">
                     {(featuredPokemons.map((pokemon, index) => (
-                      <li key={pokemon.id + index}>
+                      <li key={pokemon.id + index} className="w-full flex justify-center">
                         <PokemonCard pokemon={pokemon} color={pokemon.color} />
                       </li>
                     )))}

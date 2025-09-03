@@ -1,33 +1,69 @@
 "use client";
 
-import { fetchPokemonListItem, fetchPokemons } from "@/lib/data/pokemons";
+import { fetchPokemonByName, fetchPokemonListItem, fetchPokemons } from "@/lib/data/pokemons";
 import { PokemonListItem } from "@/lib/interfaces";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
+import PokemonCard from "./pokemonCard";
 
-export default function SearchBar() {
+interface SearchBarProps {
+  onSearchPage?: boolean;
+}
+
+export default function SearchBar({ onSearchPage }: SearchBarProps) {
   const [query, setQuery] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [pokemonList, setPokemonList] = useState<PokemonListItem[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const [filteredPokemonsDetails, setFilteredPokemonsDetails] = useState<any[]>([]);
   const router = useRouter();
   const offset = 0;
   const limit = 1302; // match pokemons.ts
   const ulRef = useRef<HTMLUListElement>(null);
 
+  // Load initial Pokemon list
   useEffect(() => {
     async function loadData() {
+      //prefetch pokemons
       const data = await fetchPokemonListItem(offset, limit);
       setPokemonList(data);
     }
     loadData();
   }, []);
 
-  const filteredPokemons =
+  // Filter Pokemon based on query
+  const filteredPokemons = useMemo(() => 
     query.length > 0
-      ? pokemonList.filter(pokemon => pokemon.name.toLowerCase().startsWith(query.toLowerCase()))
-      : [];
+      ? pokemonList.filter(pokemon => 
+          pokemon.name.toLowerCase().startsWith(query.toLowerCase())
+        )
+      : []
+  , [query, pokemonList]);
+
+  // Fetch details for filtered Pokemon
+  useEffect(() => {
+    let isMounted = true;
+
+    async function fetchDetails() {
+      if (filteredPokemons.length > 0 && onSearchPage) {
+        const details = await Promise.all(
+          filteredPokemons.map(pokemon => fetchPokemonByName(pokemon.name))
+        );
+        if (isMounted) {
+          setFilteredPokemonsDetails(details.filter(Boolean));
+        }
+      } else {
+        setFilteredPokemonsDetails([]);
+      }
+    }
+
+    fetchDetails();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [filteredPokemons, onSearchPage]);
 
   // Reset highlight when dropdown changes
   useEffect(() => {
@@ -77,6 +113,7 @@ export default function SearchBar() {
   };
 
   return (
+    <main>
     <div className="relative w-80 mx-auto">
       <input
         type="text"
@@ -91,7 +128,7 @@ export default function SearchBar() {
         onFocus={() => setShowDropdown(query.length > 0)}
         onKeyDown={handleKeyDown}
       />
-      {showDropdown && filteredPokemons.length > 0 && (
+      {!onSearchPage && showDropdown && filteredPokemons.length > 0 && (
         <ul
           ref={ulRef}
           className="absolute left-0 right-0 bg-white border rounded shadow z-10 max-h-60 overflow-y-auto"
@@ -114,7 +151,20 @@ export default function SearchBar() {
             </li>
           ))}
         </ul>
+        )}
+      </div>
+      <div className="mx-auto">
+      {onSearchPage && filteredPokemonsDetails.length > 0 && (
+        <ul className="grid gap-x-6 gap-y-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 mt-10">
+          {filteredPokemonsDetails.map((pokemon) => (
+            <li key={pokemon.name}>
+                <PokemonCard pokemon={pokemon} color={pokemon.color} />
+             
+            </li>
+          ))}
+        </ul>
       )}
-    </div>
+      </div>
+      </main>
   );
 }

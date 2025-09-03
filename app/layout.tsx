@@ -29,6 +29,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${jaldi.variable} ${jersey.variable} antialiased`}
+        suppressHydrationWarning
       >
         <header className="content-grid">
           <NavMain />

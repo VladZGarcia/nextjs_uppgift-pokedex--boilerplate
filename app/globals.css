@@ -11,6 +11,12 @@
   --font-jaldi: var(--font-jaldi);
   --font-jersey: var(--font-jersey);
 }
+
+@layer base {
+  .font-verdana {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+}
 /* 
 @media (prefers-color-scheme: dark) {
   :root {
