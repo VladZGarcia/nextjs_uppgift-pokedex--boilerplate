@@ -1,36 +1,27 @@
 import Footer from "@/app/components/footer";
 import MainWrapper from "@/app/components/main-wrapper";
-import PokemonCard from "@/app/components/pokemon-card";
+import PokemonTypeList from "@/app/components/pokemon-type-list";
 import { fetchPokemonsByType } from "@/lib/data/pokemons";
-import { Pokemon } from "@/lib/interfaces";
+import { typeColors, PokemonType } from "@/lib/data/pokemonColors";
 
-async function GetPokemonsByType({
-  params,
-}: {
-  params: Promise<{ type: string }>;
-}) {
-  const { type } = await params;
-  const pokemons: Pokemon[] = await fetchPokemonsByType(type.toLowerCase());
-  return (
-    <ul className="grid gap-x-6 gap-y-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 mt-8">
-      {pokemons.map((pokemon) => (
-        <li key={pokemon.id}>
-          <PokemonCard pokemon={pokemon} color={pokemon.color} />
-        </li>
-      ))}
-    </ul>
-  );
+async function GetPokemonsByType({ params }: { params: { type: string } }) {
+  const type = (await params).type.toLowerCase();
+  const pokemons = await fetchPokemonsByType(type);
+
+  return <PokemonTypeList pokemons={pokemons} type={type} />;
 }
 
 export default async function PokemonsByTypePage({
   params,
 }: {
-  params: Promise<{ type: string }>;
+  params: { type: string };
 }) {
-  const { type } = await params;
+  const type = (await params).type.toLowerCase();
+  const displayType = type.charAt(0).toUpperCase() + type.slice(1);
+
   return (
     <main className="flex flex-col mb-10">
-      <MainWrapper title={`Type: ${type}`}>
+      <MainWrapper title={`${displayType} Type Pokémon`}>
         <GetPokemonsByType params={params} />
       </MainWrapper>
       <Footer />

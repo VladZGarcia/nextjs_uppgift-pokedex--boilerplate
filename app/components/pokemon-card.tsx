@@ -34,8 +34,8 @@ export default function PokemonCard({
         className={`relative w-72 flex flex-col bg-gradient-to-br from-yellow-100 to-yellow-600 border-4 border-yellow-700 rounded-2xl p-3 font-verdana 
         transform-gpu transition-all duration-300 ease-out hover:[transform:translateY(-8px)_scale(1.05)_rotate(2deg)]
         shadow-[0_10px_20px_rgba(0,0,0,0.2)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]
-        before:absolute before:inset-0 before:rounded-xl before:bg-black/5 before:opacity-0 hover:before:opacity-100 before:transition-opacity
-        after:absolute after:inset-0 after:rounded-xl after:bg-gradient-to-br after:from-white/20 after:to-transparent
+        before:absolute before:inset-0 before:rounded-xl before:bg-black/5 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:pointer-events-none
+        after:absolute after:inset-0 after:rounded-xl after:bg-gradient-to-br after:from-white/20 after:to-transparent after:pointer-events-none
         ${className}`}
       >
         {/* Card Name */}
@@ -73,7 +73,19 @@ export default function PokemonCard({
           </div>
         </div>
         {/* Types */}
-        <Badges types={pokemon.types.map((t) => t.type.name)} color={color} />
+        <div
+          className="relative isolate"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+          style={{
+            position: "relative",
+            zIndex: 50,
+          }}
+        >
+          <Badges types={pokemon.types.map((t) => t.type.name)} color={color} />
+        </div>
         {/* Stats */}
         <div className="bg-yellow-50 rounded-lg p-2 border-1 border-yellow-600 relative z-10 transition-all duration-300 group-hover:bg-yellow-100 group-hover:shadow-lg">
           <h3 className="text-base font-bold text-yellow-700 mb-1 transition-colors group-hover:text-yellow-800">
