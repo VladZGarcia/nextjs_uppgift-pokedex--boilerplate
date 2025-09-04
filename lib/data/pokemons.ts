@@ -21,28 +21,49 @@ export async function fetchPokemons(offset: number, limit: number): Promise<Poke
 }
 
 export async function fetchPokemonByName(name: string): Promise<Pokemon | null> {
-  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`).then(res => res.json());
-  const species = await fetch(`${response.species.url}`).then(res => res.json());
-  if (!species.color) return { ...response, color: 'yellow' };
-  return { ...response, color: species.color?.name || 'yellow' };
+  try {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`);
+    
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error(`Pokemon ${name} not found`);
+      }
+      throw new Error(`Failed to fetch pokemon: ${response.statusText}`);
+    }
+
+    const pokemon = await response.json();
+    const species = await fetch(`${pokemon.species.url}`).then(res => res.json());
+    if (!species.color) return { ...pokemon, color: 'yellow' };
+    return { ...pokemon, color: species.color?.name || 'yellow' };
+  } catch (error) {
+    console.error('Error fetching pokemon:', error);
+    return null;
+  }
 }
 
 export async function fetchPokemonsByType(type: string): Promise<Pokemon[]> {
-  const response = await fetch(`https://pokeapi.co/api/v2/type/${type}`);
-  if (!response.ok) {
+  try {
+    const response = await fetch(`https://pokeapi.co/api/v2/type/${type.toLowerCase()}`);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch pokemon of type ${type}`);
+    }
+
+    const data = await response.json();
+    console.log("Pokemon of type", type, ":", data.pokemon.length);
+
+    const pokemonDetails = await Promise.all(
+      data.pokemon.map(async (p: { pokemon: { name: string } }) => {
+        const details = await fetchPokemonByName(p.pokemon.name);
+        return details;
+      })
+    );
+
+    return pokemonDetails.filter((p): p is Pokemon => p !== null);
+  } catch (error) {
+    console.error('Error fetching pokemon by type:', error);
     return [];
   }
-  const data = await response.json();
-  console.log("Pokemon of type", type, ":", data.pokemon.length);
-
-  const pokemonDetails = await Promise.all(
-    data.pokemon.map(async (p: { pokemon: { name: string } }) => {
-      const details = await fetchPokemonByName(p.pokemon.name);
-      return details;
-    })
-  );
-
-  return pokemonDetails.filter((p): p is Pokemon => p !== null);
 }
 
 export async function fetchRandomPokemon(): Promise<Pokemon & { color: string }> {

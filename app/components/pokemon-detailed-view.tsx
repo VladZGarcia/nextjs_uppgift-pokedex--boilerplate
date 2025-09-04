@@ -32,8 +32,8 @@ export default function PokemonDetails({
       className="relative w-[36rem] mx-auto flex flex-col bg-gradient-to-br from-yellow-100 to-yellow-600 border-4 border-yellow-700 rounded-2xl p-4 font-verdana
       transform-gpu transition-all duration-300 ease-out hover:translate-y-[-8px]
       shadow-[0_10px_20px_rgba(0,0,0,0.2)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]
-      before:absolute before:inset-0 before:rounded-xl before:bg-black/5 before:opacity-0 hover:before:opacity-100 before:transition-opacity
-      after:absolute after:inset-0 after:rounded-xl after:bg-gradient-to-br after:from-white/20 after:to-transparent group"
+      before:absolute before:inset-0 before:rounded-xl before:bg-black/5 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:pointer-events-none
+      after:absolute after:inset-0 after:rounded-xl after:bg-gradient-to-br after:from-white/20 after:to-transparent after:pointer-events-none group"
     >
       {/* Card Name */}
       <div className="flex justify-between items-center mb-2">
@@ -75,7 +75,7 @@ export default function PokemonDetails({
           </div>
 
           {/* Types */}
-          <div className="transition-transform duration-300 group-hover:translate-y-[-2px]">
+          <div className="transition-transform duration-300 group-hover:translate-y-[-2px] relative z-50">
             <Badges
               types={pokemon.types.map((t) => t.type.name)}
               color={color}
