@@ -1,3 +1,4 @@
+import ErrorTest from "@/app/components/error-test";
 import Footer from "@/app/components/footer";
 import { LoadingScreen } from "@/app/components/loading-screen";
 import MainWrapper from "@/app/components/main-wrapper";
