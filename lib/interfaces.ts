@@ -13,6 +13,8 @@ export interface PokemonStat {
     name: string;
     url: string;
   };
+  height: number;
+  weight: number;
 }
 
 export interface PokemonListItem {
@@ -41,4 +43,21 @@ export interface Pokemon {
   types: PokemonType[];
   stats: PokemonStat[];
   color?: string;
+  height: number;
+  weight: number;
+  base_experience: number;
+  abilities: {
+    ability: {
+      name: string;
+      url: string;
+    };
+    is_hidden: boolean;
+    slot: number;
+  }[];
+  moves: {
+    move: {
+      name: string;
+      url: string;
+    };
+  }[];
 }
