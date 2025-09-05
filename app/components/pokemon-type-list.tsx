@@ -20,29 +20,16 @@ export default function PokemonTypeList({
   const typeColor = typeColors[type as PokemonType] || "#ffd700";
   const [displayedPokemons, setDisplayedPokemons] = useState<Pokemon[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(true); // Start with loading true
+  const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const loaderRef = useRef<HTMLDivElement>(null);
   const loadingRef = useRef(false);
   const initialLoadDone = useRef(false);
 
-  useEffect(() => {
-    // Reset state when type changes
-    setDisplayedPokemons([]);
-    setCurrentIndex(0);
-    setHasMore(true);
-    setLoading(true); // Set loading true on type change
-    initialLoadDone.current = false;
-
-    // Use requestAnimationFrame to load after paint
-    requestAnimationFrame(() => {
-      loadMorePokemons();
-    });
-  }, [type]);
-
   const loadMorePokemons = () => {
     if (loadingRef.current) return;
     loadingRef.current = true;
+    setLoading(true);
 
     const nextPokemons = pokemons.slice(
       currentIndex,
@@ -57,42 +44,60 @@ export default function PokemonTypeList({
       return [...prev, ...newPokemons];
     });
 
-    setCurrentIndex((prev) => prev + POKEMONS_PER_PAGE);
+    setCurrentIndex((prev) => {
+      const nextIndex = prev + POKEMONS_PER_PAGE;
+      if (nextIndex >= pokemons.length) {
+        setHasMore(false);
+      }
+      return nextIndex;
+    });
 
-    if (currentIndex + POKEMONS_PER_PAGE >= pokemons.length) {
-      setHasMore(false);
-    }
-
-    setLoading(false);
-    loadingRef.current = false;
-    initialLoadDone.current = true;
+    setTimeout(() => {
+      setLoading(false);
+      loadingRef.current = false;
+      initialLoadDone.current = true;
+    }, 500);
   };
 
   useEffect(() => {
-    if (!hasMore) return;
+    setDisplayedPokemons([]);
+    setCurrentIndex(0);
+    setHasMore(true);
+    setLoading(true);
+    initialLoadDone.current = false;
+    loadingRef.current = false;
 
+    requestAnimationFrame(() => {
+      loadMorePokemons();
+    });
+  }, [type]);
+
+  useEffect(() => {
+    if (!hasMore || loading) return;
+
+    const currentLoader = loaderRef.current;
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !loading && hasMore) {
+        if (entries[0].isIntersecting && !loadingRef.current) {
           loadMorePokemons();
         }
       },
       {
         threshold: 0,
-        rootMargin: "200px", // Reduced from 400px to prevent too early loading
+        rootMargin: "100px",
       }
     );
 
-    if (loaderRef.current) {
-      observer.observe(loaderRef.current);
+    if (currentLoader) {
+      observer.observe(currentLoader);
     }
 
     return () => {
-      if (loaderRef.current) {
-        observer.unobserve(loaderRef.current);
+      if (currentLoader) {
+        observer.unobserve(currentLoader);
       }
     };
-  }, [hasMore, loading]);
+  }, [hasMore, loading, currentIndex]);
 
   if (!initialLoadDone.current) {
     return (

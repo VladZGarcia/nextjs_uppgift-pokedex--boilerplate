@@ -4,12 +4,11 @@ import { fetchRandomPokemon } from "@/lib/data/pokemons";
 import Image from "next/image";
 import PokemonCard from "./pokemon-card";
 import { LoadingScreen } from "./loading-screen";
-
+import { Pokemon } from "@/lib/interfaces";
 
 export default function RandomPokemon() {
-  const [pokemon, setPokemon] = useState<any>(null);
+  const [pokemon, setPokemon] = useState<Pokemon | null>(null);
   const [loading, setLoading] = useState(false);
-
 
   const getRandomPokemon = async () => {
     setLoading(true);
@@ -21,12 +20,15 @@ export default function RandomPokemon() {
   useEffect(() => {
     getRandomPokemon();
   }, []);
-    
-    return (
+
+  return (
     <main>
       <section className="flex flex-col items-center gap-4 p-14">
-        
-        <button className="btn-primary flex items-center gap-2" onClick={getRandomPokemon} disabled={loading}>
+        <button
+          className="btn-primary flex items-center gap-2"
+          onClick={getRandomPokemon}
+          disabled={loading}
+        >
           <Image
             src={loading ? "/search.svg" : "/Dice.svg"}
             width={25}
@@ -35,7 +37,11 @@ export default function RandomPokemon() {
           />
           {loading ? "Loading..." : "Random Pokémon"}
         </button>
-        {loading ? <LoadingScreen /> : (pokemon && <PokemonCard pokemon={pokemon} color={pokemon.color} />)}
+        {loading ? (
+          <LoadingScreen />
+        ) : (
+          pokemon && <PokemonCard pokemon={pokemon} color={pokemon.color} />
+        )}
       </section>
     </main>
   );

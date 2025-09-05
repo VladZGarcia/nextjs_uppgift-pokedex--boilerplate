@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 interface ErrorProps {
   error: Error & { digest?: string };
   reset: () => void;
@@ -68,13 +70,13 @@ export default function SharedError({
               </button>
             )}
             {showHomeButton && (
-              <a
+              <Link
                 href="/"
                 className="bg-gray-400 hover:bg-gray-500 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 
                   hover:shadow-lg hover:-translate-y-1 active:translate-y-0 transform-gpu inline-block text-lg"
               >
                 Go Home
-              </a>
+              </Link>
             )}
           </div>
         </div>

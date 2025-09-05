@@ -8,7 +8,7 @@ export default function NotFound() {
           404 - Page Not Found
         </h2>
         <p className="text-gray-600 mb-6">
-          The Pokemon you're looking for might be hiding in tall grass...
+          The Pokemon you&apos;re looking for might be hiding in tall grass...
         </p>
         <Link
           href="/"

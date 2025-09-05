@@ -4,13 +4,10 @@ import { fetchPokemons } from "@/lib/data/pokemons";
 import { Pokemon } from "@/lib/interfaces";
 import { useState, useEffect, useRef } from "react";
 import { LoadingScreen } from "./loading-screen";
-import Link from "next/link";
 
 const nrOfPokemonsToFetch = 50;
 const offsetStart = 0;
 const maxOffset = 1302;
-const listGapStart = 1025;
-const listGapEnd = 10001;
 
 export function PokedexList() {
   const [offset, setOffset] = useState(offsetStart);

@@ -1,13 +1,10 @@
-import ErrorTest from "@/app/components/error-test";
 import Footer from "@/app/components/footer";
 import MainWrapper from "@/app/components/main-wrapper";
 import SearchBar from "@/app/components/search-bar";
-import { Pokemon } from "@/lib/interfaces";
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ query?: string }> }) {
   const params = await searchParams;
     const query = params.query || "";
-    let searchResults: Pokemon[] = [];
 
   return (
     <main className="flex flex-col mb-10">

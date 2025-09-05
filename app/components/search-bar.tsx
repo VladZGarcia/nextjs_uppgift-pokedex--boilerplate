@@ -1,7 +1,7 @@
 "use client";
 
-import { fetchPokemonByName, fetchPokemonListItem, fetchPokemons } from "@/lib/data/pokemons";
-import { PokemonListItem } from "@/lib/interfaces";
+import { fetchPokemonByName, fetchPokemonListItem } from "@/lib/data/pokemons";
+import { Pokemon, PokemonListItem } from "@/lib/interfaces";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState, useEffect, useMemo } from "react";
@@ -16,10 +16,12 @@ export default function SearchBar({ onSearchPage }: SearchBarProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [pokemonList, setPokemonList] = useState<PokemonListItem[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
-  const [filteredPokemonsDetails, setFilteredPokemonsDetails] = useState<any[]>([]);
+  const [filteredPokemonsDetails, setFilteredPokemonsDetails] = useState<any[]>(
+    []
+  );
   const router = useRouter();
   const offset = 0;
-  const limit = 1302; 
+  const limit = 1302;
   const ulRef = useRef<HTMLUListElement>(null);
 
   // Load initial Pokemon list
@@ -33,13 +35,15 @@ export default function SearchBar({ onSearchPage }: SearchBarProps) {
   }, []);
 
   // Filter Pokemon based on query
-  const filteredPokemons = useMemo(() => 
-    query.length > 0
-      ? pokemonList.filter(pokemon => 
-          pokemon.name.toLowerCase().startsWith(query.toLowerCase())
-        )
-      : []
-  , [query, pokemonList]);
+  const filteredPokemons = useMemo(
+    () =>
+      query.length > 0
+        ? pokemonList.filter((pokemon) =>
+            pokemon.name.toLowerCase().startsWith(query.toLowerCase())
+          )
+        : [],
+    [query, pokemonList]
+  );
 
   // Fetch details for filtered Pokemon
   useEffect(() => {
@@ -48,7 +52,7 @@ export default function SearchBar({ onSearchPage }: SearchBarProps) {
     async function fetchDetails() {
       if (filteredPokemons.length > 0 && onSearchPage) {
         const details = await Promise.all(
-          filteredPokemons.map(pokemon => fetchPokemonByName(pokemon.name))
+          filteredPokemons.map((pokemon) => fetchPokemonByName(pokemon.name))
         );
         if (isMounted) {
           setFilteredPokemonsDetails(details.filter(Boolean));
@@ -112,58 +116,63 @@ export default function SearchBar({ onSearchPage }: SearchBarProps) {
     }
   };
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+    setShowDropdown(event.target.value.length > 0);
+  };
+
   return (
     <main>
-    <div className="relative w-80 mx-auto">
-      <input
-        type="text"
-        className="w-full p-2 border rounded bg-white"
-        placeholder="Search Pokémon..."
-        value={query}
-        onChange={(e) => {
-          setQuery(e.target.value);
-          setShowDropdown(e.target.value.length > 0);
-        }}
-        onBlur={() => setTimeout(() => setShowDropdown(false), 100)}
-        onFocus={() => setShowDropdown(query.length > 0)}
-        onKeyDown={handleKeyDown}
-      />
-      {!onSearchPage && showDropdown && filteredPokemons.length > 0 && (
-        <ul
-          ref={ulRef}
-          className="absolute left-0 right-0 bg-white border rounded shadow z-10 max-h-60 overflow-y-auto"
-        >
-          {filteredPokemons.map((pokemon, idx) => (
-            <li
-              key={pokemon.name}
-              className={`p-2 cursor-pointer ${
-                idx === highlightedIndex
-                  ? "bg-yellow-200"
-                  : "hover:bg-yellow-100"
-                }`}>
-              <Link href={`/pages/search/${pokemon.name}`} key={pokemon.name}
-              onClick={() => {
-                setShowDropdown(false);
-              }}
-            >
-                {pokemon.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
+      <div className="relative w-80 mx-auto">
+        <input
+          type="text"
+          className="w-full p-2 border rounded bg-white"
+          placeholder="Search Pokémon..."
+          value={query}
+          onChange={handleChange}
+          onBlur={() => setTimeout(() => setShowDropdown(false), 100)}
+          onFocus={() => setShowDropdown(query.length > 0)}
+          onKeyDown={handleKeyDown}
+        />
+        {!onSearchPage && showDropdown && filteredPokemons.length > 0 && (
+          <ul
+            ref={ulRef}
+            className="absolute left-0 right-0 bg-white border rounded shadow z-10 max-h-60 overflow-y-auto"
+          >
+            {filteredPokemons.map((pokemon, idx) => (
+              <li
+                key={pokemon.name}
+                className={`p-2 cursor-pointer ${
+                  idx === highlightedIndex
+                    ? "bg-yellow-200"
+                    : "hover:bg-yellow-100"
+                }`}
+              >
+                <Link
+                  href={`/pages/search/${pokemon.name}`}
+                  key={pokemon.name}
+                  onClick={() => {
+                    setShowDropdown(false);
+                  }}
+                >
+                  {pokemon.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
         )}
       </div>
       <div className="mx-auto mt-8">
-      {onSearchPage && filteredPokemonsDetails.length > 0 && (
-        <ul className="grid gap-x-6 gap-y-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
-          {filteredPokemonsDetails.map((pokemon) => (
-            <li key={pokemon.name}>
+        {onSearchPage && filteredPokemonsDetails.length > 0 && (
+          <ul className="grid gap-x-6 gap-y-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
+            {filteredPokemonsDetails.map((pokemon) => (
+              <li key={pokemon.name}>
                 <PokemonCard pokemon={pokemon} color={pokemon.color} />
-            </li>
-          ))}
-        </ul>
-      )}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
-      </main>
+    </main>
   );
 }

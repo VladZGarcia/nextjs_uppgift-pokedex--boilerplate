@@ -4,8 +4,6 @@ import Link from "next/link";
 import {
   pokemonTypes,
   typeColors,
-  typeTextColors,
-  PokemonType,
 } from "@/lib/data/pokemonColors";
 
 export default function TypesList() {

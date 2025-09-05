@@ -2,9 +2,6 @@ import Footer from "@/app/components/footer";
 import MainWrapper from "@/app/components/main-wrapper";
 import PokemonTypeList from "@/app/components/pokemon-type-list";
 import { fetchPokemonsByType } from "@/lib/data/pokemons";
-import { typeColors, PokemonType } from "@/lib/data/pokemonColors";
-import ErrorTest from "@/app/components/error-test";
-
 async function GetPokemonsByType({ params }: { params: { type: string } }) {
   const type = (await params).type.toLowerCase();
   const pokemons = await fetchPokemonsByType(type);
