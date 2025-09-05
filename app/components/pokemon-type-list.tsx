@@ -11,7 +11,7 @@ interface PokemonTypeListProps {
   type: string;
 }
 
-const POKEMONS_PER_PAGE = 30;
+const POKEMONS_PER_PAGE = 20;
 
 export default function PokemonTypeList({
   pokemons,
@@ -20,49 +20,52 @@ export default function PokemonTypeList({
   const typeColor = typeColors[type as PokemonType] || "#ffd700";
   const [displayedPokemons, setDisplayedPokemons] = useState<Pokemon[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Start with loading true
   const [hasMore, setHasMore] = useState(true);
   const loaderRef = useRef<HTMLDivElement>(null);
-  const loadingRef = useRef(false); // Add this to prevent multiple loads
+  const loadingRef = useRef(false);
+  const initialLoadDone = useRef(false);
 
   useEffect(() => {
     // Reset state when type changes
     setDisplayedPokemons([]);
     setCurrentIndex(0);
     setHasMore(true);
-    loadMorePokemons();
-  }, [type]); // Only reload when type changes
+    setLoading(true); // Set loading true on type change
+    initialLoadDone.current = false;
+
+    // Use requestAnimationFrame to load after paint
+    requestAnimationFrame(() => {
+      loadMorePokemons();
+    });
+  }, [type]);
 
   const loadMorePokemons = () => {
-    if (loadingRef.current) return; // Prevent multiple loads
+    if (loadingRef.current) return;
     loadingRef.current = true;
-    setLoading(true);
 
-    setTimeout(() => {
-      // Add small delay to prevent rapid firing
-      const nextPokemons = pokemons.slice(
-        currentIndex,
-        currentIndex + POKEMONS_PER_PAGE
+    const nextPokemons = pokemons.slice(
+      currentIndex,
+      currentIndex + POKEMONS_PER_PAGE
+    );
+
+    setDisplayedPokemons((prev) => {
+      const newPokemons = nextPokemons.filter(
+        (newPoke) =>
+          !prev.some((existingPoke) => existingPoke.id === newPoke.id)
       );
+      return [...prev, ...newPokemons];
+    });
 
-      setDisplayedPokemons((prev) => {
-        // Prevent duplicates by checking IDs
-        const newPokemons = nextPokemons.filter(
-          (newPoke) =>
-            !prev.some((existingPoke) => existingPoke.id === newPoke.id)
-        );
-        return [...prev, ...newPokemons];
-      });
+    setCurrentIndex((prev) => prev + POKEMONS_PER_PAGE);
 
-      setCurrentIndex((prev) => prev + POKEMONS_PER_PAGE);
+    if (currentIndex + POKEMONS_PER_PAGE >= pokemons.length) {
+      setHasMore(false);
+    }
 
-      if (currentIndex + POKEMONS_PER_PAGE >= pokemons.length) {
-        setHasMore(false);
-      }
-
-      setLoading(false);
-      loadingRef.current = false;
-    }, 300); // 300ms delay
+    setLoading(false);
+    loadingRef.current = false;
+    initialLoadDone.current = true;
   };
 
   useEffect(() => {
@@ -90,6 +93,14 @@ export default function PokemonTypeList({
       }
     };
   }, [hasMore, loading]);
+
+  if (!initialLoadDone.current) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingScreen />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4">
