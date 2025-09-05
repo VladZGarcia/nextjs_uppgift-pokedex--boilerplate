@@ -13,7 +13,7 @@ export default function Pokedex() {
           <PokedexList />
         </Suspense>
       </MainWrapper>
-      <ErrorTest />
+      {/* <ErrorTest /> */}
       <Footer />
     </main>
   );

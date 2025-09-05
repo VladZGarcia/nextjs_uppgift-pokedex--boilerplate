@@ -14,6 +14,7 @@ export default function Favorites() {
           </div>
         </Suspense>
       </MainWrapper>
+      {/* <ErrorTest /> */}
       <Footer />
     </main>
   );

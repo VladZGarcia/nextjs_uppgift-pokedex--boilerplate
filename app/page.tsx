@@ -30,6 +30,7 @@ export default function Home() {
           <FeaturedPokemons />
         </Suspense>
       </section>
+      {/* <ErrorTest /> */}
       <Footer />
     </main>
   );

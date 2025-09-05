@@ -1,3 +1,4 @@
+import ErrorTest from "@/app/components/error-test";
 import Footer from "@/app/components/footer";
 import MainWrapper from "@/app/components/main-wrapper";
 import SearchBar from "@/app/components/search-bar";
@@ -15,7 +16,8 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
         <SearchBar onSearchPage={true} />
         {/* Render search results here */}
       </div>
-    </MainWrapper>
+      </MainWrapper>
+      {/* <ErrorTest /> */}
     <Footer />
     </main>
   );

@@ -25,6 +25,7 @@ export default async function PokemonsByTypePage({
       <MainWrapper title={`${displayType} Type Pokémon`}>
         <GetPokemonsByType params={params} />
       </MainWrapper>
+      {/* <ErrorTest /> */}
       <Footer />
     </main>
   );

@@ -16,6 +16,7 @@ export default function Types() {
           </section>
         </Suspense>
       </MainWrapper>
+      {/* <ErrorTest /> */}
       <Footer />
     </main>
   );
