@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState, useEffect, useMemo } from "react";
 import PokemonCard from "./pokemon-card";
+import { LoadingScreen } from "./loading-screen";
 
 interface SearchBarProps {
   onSearchPage?: boolean;
@@ -19,6 +20,7 @@ export default function SearchBar({ onSearchPage }: SearchBarProps) {
   const [filteredPokemonsDetails, setFilteredPokemonsDetails] = useState<any[]>(
     []
   );
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const offset = 0;
   const limit = 1302;
@@ -39,7 +41,7 @@ export default function SearchBar({ onSearchPage }: SearchBarProps) {
     () =>
       query.length > 0
         ? pokemonList.filter((pokemon) =>
-            pokemon.name.toLowerCase().startsWith(query.toLowerCase())
+            pokemon.name.toLowerCase().includes(query.toLowerCase())
           )
         : [],
     [query, pokemonList]
@@ -51,14 +53,17 @@ export default function SearchBar({ onSearchPage }: SearchBarProps) {
 
     async function fetchDetails() {
       if (filteredPokemons.length > 0 && onSearchPage) {
+        setIsLoading(true);
         const details = await Promise.all(
           filteredPokemons.map((pokemon) => fetchPokemonByName(pokemon.name))
         );
         if (isMounted) {
           setFilteredPokemonsDetails(details.filter(Boolean));
+          setIsLoading(false);
         }
       } else {
         setFilteredPokemonsDetails([]);
+        setIsLoading(false);
       }
     }
 
@@ -163,7 +168,12 @@ export default function SearchBar({ onSearchPage }: SearchBarProps) {
         )}
       </div>
       <div className="mx-auto mt-8">
-        {onSearchPage && filteredPokemonsDetails.length > 0 && (
+        {onSearchPage && isLoading && (
+          <div className="flex justify-center items-center">
+            <LoadingScreen />
+          </div>
+        )}
+        {onSearchPage && filteredPokemonsDetails.length > 0 && !isLoading && (
           <ul className="grid gap-x-6 gap-y-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
             {filteredPokemonsDetails.map((pokemon) => (
               <li key={pokemon.name}>

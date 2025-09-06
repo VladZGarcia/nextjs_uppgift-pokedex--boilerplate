@@ -5,7 +5,7 @@ import { Pokemon } from "@/lib/interfaces";
 import { useState, useEffect, useRef } from "react";
 import { LoadingScreen } from "./loading-screen";
 
-const nrOfPokemonsToFetch = 50;
+const nrOfPokemonsToFetch = 30;
 const offsetStart = 0;
 const maxOffset = 1302;
 
